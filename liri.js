@@ -1,7 +1,7 @@
 require("dotenv").config();
 var keys = require("./keys.js");
 //var client = new Twitter(keys.twitter);
-var client = new twitter({
+var client = new Twitter({
     consumer_key: keys.twitterKeys.consumer_key,
     consumer_secret: keys.twitterKeys.consumer_secret,
     access_token_key: keys.twitterKeys.access_token_key,
