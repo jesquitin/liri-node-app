@@ -1,21 +1,12 @@
 require("dotenv").config();
-var keys = require("./keys.js");
-//var client = new Twitter(keys.twitter);
-var client = new Twitter({
-    consumer_key: keys.twitterKeys.consumer_key,
-    consumer_secret: keys.twitterKeys.consumer_secret,
-    access_token_key: keys.twitterKeys.access_token_key,
-    access_token_secret: keys.twitterKeys.access_token_secret
-});
-//var Spotify = new Spotify(keys.spotify);
-var spotify = new Spotify({
-    id: "127bbbae39c14af59b7b4e531bd59928",
-    secret:"4c96afb5af154934b8cfd19f9fea1c44"
-  });
+var twitter = require("twitter");
 var request = require("request");
-var Twitter = require("twitter");
-var Spotify = require("node-spotify-api");
+var spotify = require("node-spotify-api");
+var keys = require("./keys.js");
 var fs = require("fs");
+var client = new twitter(keys.twitter);
+var spotify = new spotify(keys.spotify);
+
 
 //aguments
 var actions = process.argv[2];
@@ -31,9 +22,9 @@ switch(actions) {
     case "spotify-this-song":
     getSong();
     break;
-   // case "movie-this":
-    //getMovie();
-    //break;
+   case "movie-this":
+    getMovie();
+    break;
     //case "do-what-it-says":
     //getRandom();
     //break;
@@ -45,7 +36,7 @@ function showTweets (){
         screenName: "joeesq23",
         count: 20
     };
-    client.get("statuses/user/timeline", prameters, function(error, tweets, responses) {
+    client.get("statuses/user/timeline", parameters, function(error, tweets, responses) {
         if(!error){
             for (var i = 0;i < tweets.length; i++){
                 var resultData = ("Number: " +(i+1) + "\n" + tweets[i].created_at + "\n" + tweets[i].text + "\n");
@@ -78,5 +69,35 @@ function getSong(song) {
 	        console.log("Album: " + data.tracks.items[0].album.name);
 	        console.log("Preview Here: " + data.tracks.items[0].preview_url);
         }
+    });
+}
+
+//Movies
+function getMovie(){
+	console.log("Where can I see it?Netflix or Hulu!!!");
+
+	//same as above, test if search term entered
+	var searchMovie;
+	if(argTwo == null){
+        searchMovie = "Mr. Nobody";
+        //Console.log("If you have not watched Mr. Nobody" + "\nYou shoud.  It is on Netflix");
+	}else{
+		searchMovie = argTwo;
+	}
+
+	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&apikey=trilogy';
+   	request(url, function(error, response, body){
+           //console.log(body);
+	    if(!error && response.statusCode == 200){
+	        console.log("Title: " + JSON.parse(body).Title);
+	        console.log("Year: " + JSON.parse(body).Year);
+            console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).tomatoRating);
+	        console.log("Country: " + JSON.parse(body).Country);
+	        console.log("Language: " + JSON.parse(body).Language);
+	        console.log("Plot: " + JSON.parse(body).Plot);
+	        console.log("Actors: " + JSON.parse(body).Actors);
+	        
+	    }
     });
 }
