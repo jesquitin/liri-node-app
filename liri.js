@@ -76,7 +76,7 @@ function getSong(song) {
 function getMovie(){
 	console.log("Where can I see it?Netflix or Hulu!!!");
 
-	//same as above, test if search term entered
+	//search query
 	var searchMovie;
 	if(argTwo == null){
         searchMovie = "Mr. Nobody";
